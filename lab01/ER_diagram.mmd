@@ -1,19 +1,107 @@
 erDiagram
-    USERS ||--o| SELLER_PROFILES : "профиль продавца"
-    USERS ||--o{ ADDRESSES : "имеет"
-    USERS ||--o{ CUSTOMER_ORDERS : "оформляет"
-    ADDRESSES o|--o{ CUSTOMER_ORDERS : "адрес доставки"
+    USERS ||--o| SELLERS : "профиль продавца"
+    USERS ||--o| CARTS : "корзина"
+    USERS ||--o{ ORDERS : "оформляет"
+    USERS ||--o{ ADDRESSES : "адреса"
     CATEGORIES o|--o{ CATEGORIES : "родитель"
     CATEGORIES ||--o{ PRODUCTS : "содержит"
-    SELLER_PROFILES ||--o{ PRODUCTS : "продаёт"
-    PRODUCTS ||--o{ PRODUCT_IMAGES : "изображения"
-    CUSTOMER_ORDERS ||--|{ ORDER_ITEMS : "позиции"
+    SELLERS ||--o{ PRODUCTS : "продаёт"
+    PRODUCTS ||--|| STOCK : "остаток"
+    CARTS ||--o{ CART_ITEMS : "позиции"
+    PRODUCTS ||--o{ CART_ITEMS : "в корзинах"
+    ORDERS ||--|{ ORDER_ITEMS : "состав заказа"
     PRODUCTS ||--o{ ORDER_ITEMS : "в заказах"
-    CUSTOMER_ORDERS ||--o| PAYMENTS : "оплата"
+    ORDERS ||--o{ PAYMENTS : "платежи"
     USERS ||--o{ REVIEWS : "пишет"
     PRODUCTS ||--o{ REVIEWS : "получает"
-    PRODUCTS ||--o{ PRODUCT_TAGS : "помечен"
-    TAGS ||--o{ PRODUCT_TAGS : "назначен"
-    USERS ||--o{ WISHLISTS : "создаёт"
-    WISHLISTS ||--o{ WISHLIST_ITEMS : "содержит"
-    PRODUCTS ||--o{ WISHLIST_ITEMS : "добавлен"
+    ORDERS ||--o| DELIVERIES : "доставка"
+    ADDRESSES ||--o{ DELIVERIES : "адрес"
+
+    USERS {
+        bigint id PK
+        text full_name
+        text email UK
+        text phone UK
+        text role
+        timestamptz created_at
+    }
+    SELLERS {
+        bigint id PK
+        bigint user_id FK
+        text store_name UK
+        text description
+        timestamptz created_at
+    }
+    CATEGORIES {
+        bigint id PK
+        bigint parent_id FK
+        text name UK
+    }
+    PRODUCTS {
+        bigint id PK
+        bigint seller_id FK
+        bigint category_id FK
+        text title
+        text description
+        numeric price
+        boolean is_active
+        timestamptz created_at
+    }
+    STOCK {
+        bigint product_id PK, FK
+        integer quantity
+        timestamptz updated_at
+    }
+    CARTS {
+        bigint id PK
+        bigint user_id FK, UK
+        timestamptz created_at
+    }
+    CART_ITEMS {
+        bigint cart_id PK, FK
+        bigint product_id PK, FK
+        integer quantity
+    }
+    ORDERS {
+        bigint id PK
+        bigint user_id FK
+        text status
+        numeric total_amount
+        timestamptz created_at
+    }
+    ORDER_ITEMS {
+        bigint order_id PK, FK
+        bigint product_id PK, FK
+        integer quantity
+        numeric unit_price
+    }
+    PAYMENTS {
+        bigint id PK
+        bigint order_id FK
+        numeric amount
+        text status
+        timestamptz paid_at
+    }
+    ADDRESSES {
+        bigint id PK
+        bigint user_id FK
+        text city
+        text street
+        text house
+        text apartment
+    }
+    DELIVERIES {
+        bigint id PK
+        bigint order_id FK, UK
+        bigint address_id FK
+        text delivery_status
+        timestamptz delivery_date
+    }
+    REVIEWS {
+        bigint id PK
+        bigint user_id FK
+        bigint product_id FK
+        smallint score
+        text comment
+        timestamptz created_at
+    }
