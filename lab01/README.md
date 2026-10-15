@@ -10,7 +10,7 @@
 
 ![ER-диаграмма маркетплейса](ER_diagram.png)
 
-Векторная версия: [`ER_diagram.svg`](ER_diagram.svg). Исходник связей Mermaid: [`ER_diagram.mmd`](ER_diagram.mmd). Рисунок построен по структуре SQL-скрипта. Postman предназначен для HTTP/API-запросов; визуальную ER-модель он не строит.
+Рисунок построен по структуре SQL-скрипта. Postman предназначен для HTTP/API-запросов; визуальную ER-модель он не строит.
 
 ## Бизнес-правила
 
@@ -83,5 +83,3 @@ psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f lab01/01_schema.sql
 
 - `01_schema.sql` — DDL и ограничения PostgreSQL.
 - `ER_diagram.png` — готовая ER-диаграмма в стиле рисунка задания.
-- `ER_diagram.svg` — векторная версия для масштабирования.
-- `ER_diagram.mmd` — текстовый исходник логических связей.
