@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="850" viewBox="0 0 1460 850" role="img" aria-labelledby="title desc">
+<title id="title">ER-схема базы данных маркетплейса</title><desc id="desc">Пять связанных таблиц для запросов лабораторной работы: sellers, categories, products, orders, order_items.</desc>
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#23384b" flood-opacity=".13"/></filter>
+<style>
+.bg{fill:#f4f7fb}.heading{font:700 26px Arial,sans-serif;fill:#20374c}.legend{font:14px Arial,sans-serif;fill:#65798d}.box{fill:#fff;stroke:#d1dce7;stroke-width:1.2;filter:url(#shadow)}.head{fill:#286b96}.ht{font:700 18px Arial,sans-serif;fill:#fff}.f{font:14px Consolas,'Courier New',monospace;fill:#243b50}.t{font:12px Consolas,'Courier New',monospace;fill:#718296}.b{fill:#e7f0f6}.bt{font:700 10px Arial,sans-serif;fill:#286b96}.rule{stroke:#e6edf3;stroke-width:1}.edge{fill:none;stroke:#8198ad;stroke-width:2}.cardinality{font:12px Arial,sans-serif;fill:#526b82}
+</style></defs>
+<rect class="bg" width="1460" height="850"/>
+<text class="heading" x="40" y="48">ER-схема базы данных маркетплейса</text>
+<text class="legend" x="40" y="76">Структура соответствует таблицам и полям из SQL-запросов лабораторной работы</text>
+<text class="legend" x="40" y="105">PK — первичный ключ · FK — внешний ключ · NN — обязательное поле · UQ — уникальное значение</text>
+<!-- Связи проведены по свободным промежуткам между таблицами -->
+<g class="edge">
+ <path d="M215 165 V135 H1040 V165"/>
+ <path d="M790 235 H840"/>
+ <path d="M1015 425 V500"/>
+ <path d="M790 625 H840"/>
+
+</g>
+<g class="cardinality"><text x="580" y="128">sellers 1 : N products</text><text x="798" y="224">1 : N</text><text x="1025" y="470">1 : N</text><text x="798" y="614">1 : N</text></g>
+<!-- sellers -->
+<g transform="translate(40 165)"><rect class="box" width="350" height="132" rx="9"/><path class="head" d="M9 0h332a9 9 0 0 1 9 9v39H0V9a9 9 0 0 1 9-9z"/><text class="ht" x="18" y="31">sellers</text>
+<g transform="translate(0 48)"><rect class="b" x="12" y="6" width="42" height="22" rx="6"/><text class="bt" x="23" y="21">PK</text><text class="f" x="72" y="22">id</text><text class="t" x="260" y="22">bigint</text><path class="rule" d="M0 36h350"/></g>
+<g transform="translate(0 84)"><rect class="b" x="12" y="6" width="55" height="22" rx="6"/><text class="bt" x="19" y="21">NN UQ</text><text class="f" x="72" y="22">store_name</text><text class="t" x="260" y="22">varchar(200)</text></g></g>
+<!-- categories -->
+<g transform="translate(440 165)"><rect class="box" width="350" height="168" rx="9"/><path class="head" d="M9 0h332a9 9 0 0 1 9 9v39H0V9a9 9 0 0 1 9-9z"/><text class="ht" x="18" y="31">categories</text>
+<g transform="translate(0 48)"><rect class="b" x="12" y="6" width="42" height="22" rx="6"/><text class="bt" x="23" y="21">PK</text><text class="f" x="72" y="22">id</text><text class="t" x="260" y="22">bigint</text><path class="rule" d="M0 36h350"/></g>
+<g transform="translate(0 84)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="20" y="21">FK</text><text class="f" x="72" y="22">parent_id</text><text class="t" x="260" y="22">bigint, nullable</text><path class="rule" d="M0 36h350"/></g>
+<g transform="translate(0 120)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">name</text><text class="t" x="260" y="22">varchar(200)</text></g></g>
+<!-- products -->
+<g transform="translate(840 165)"><rect class="box" width="400" height="296" rx="9"/><path class="head" d="M9 0h382a9 9 0 0 1 9 9v39H0V9a9 9 0 0 1 9-9z"/><text class="ht" x="18" y="31">products</text>
+<g transform="translate(0 48)"><rect class="b" x="12" y="6" width="42" height="22" rx="6"/><text class="bt" x="23" y="21">PK</text><text class="f" x="72" y="22">id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 84)"><rect class="b" x="12" y="6" width="52" height="22" rx="6"/><text class="bt" x="17" y="21">NN FK</text><text class="f" x="72" y="22">seller_id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 120)"><rect class="b" x="12" y="6" width="52" height="22" rx="6"/><text class="bt" x="17" y="21">NN FK</text><text class="f" x="72" y="22">category_id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 156)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">title</text><text class="t" x="300" y="22">varchar(300)</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 192)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">price</text><text class="t" x="300" y="22">numeric(12,2)</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 228)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">is_active</text><text class="t" x="300" y="22">boolean</text></g></g>
+<!-- orders -->
+<g transform="translate(440 550)"><rect class="box" width="350" height="168" rx="9"/><path class="head" d="M9 0h332a9 9 0 0 1 9 9v39H0V9a9 9 0 0 1 9-9z"/><text class="ht" x="18" y="31">orders</text>
+<g transform="translate(0 48)"><rect class="b" x="12" y="6" width="42" height="22" rx="6"/><text class="bt" x="23" y="21">PK</text><text class="f" x="72" y="22">id</text><text class="t" x="260" y="22">bigint</text><path class="rule" d="M0 36h350"/></g>
+<g transform="translate(0 84)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">status</text><text class="t" x="260" y="22">varchar(20)</text><path class="rule" d="M0 36h350"/></g>
+<g transform="translate(0 120)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">created_at</text><text class="t" x="260" y="22">timestamptz</text></g></g>
+<!-- order_items -->
+<g transform="translate(840 500)"><rect class="box" width="400" height="254" rx="9"/><path class="head" d="M9 0h382a9 9 0 0 1 9 9v39H0V9a9 9 0 0 1 9-9z"/><text class="ht" x="18" y="31">order_items</text>
+<g transform="translate(0 48)"><rect class="b" x="12" y="6" width="42" height="22" rx="6"/><text class="bt" x="23" y="21">PK</text><text class="f" x="72" y="22">id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 84)"><rect class="b" x="12" y="6" width="52" height="22" rx="6"/><text class="bt" x="17" y="21">NN FK</text><text class="f" x="72" y="22">order_id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 120)"><rect class="b" x="12" y="6" width="52" height="22" rx="6"/><text class="bt" x="17" y="21">NN FK</text><text class="f" x="72" y="22">product_id</text><text class="t" x="300" y="22">bigint</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 156)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">quantity</text><text class="t" x="300" y="22">integer</text><path class="rule" d="M0 36h400"/></g>
+<g transform="translate(0 192)"><rect class="b" x="12" y="6" width="32" height="22" rx="6"/><text class="bt" x="23" y="21">NN</text><text class="f" x="72" y="22">unit_price</text><text class="t" x="300" y="22">numeric(12,2)</text></g></g>
+<text class="legend" x="40" y="806">* Категории образуют дерево: categories.parent_id ссылается на categories.id (корневая категория — NULL). Для order_items уникальна пара order_id + product_id.</text>
+</svg>
+
+
