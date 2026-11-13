@@ -1,11 +1,22 @@
 -- Лабораторная работа № 2: повторяемое заполнение учебной схемы.
 -- Скрипт очищает таблицы marketplace, сбрасывает ID и создаёт согласованный набор данных.
--- Запускать после lab01/01_schema.sql в PostgreSQL 15+.
+-- Запускать после 00_schema_from_lab01.sql в PostgreSQL 15+.
 
 BEGIN;
 SET search_path TO marketplace, public;
 
+-- Обычная таблица операций прихода и отгрузки товара для складской сводки.
+CREATE TABLE IF NOT EXISTS stock_movements (
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    product_id    BIGINT NOT NULL REFERENCES products(id)
+                  ON DELETE CASCADE ON UPDATE CASCADE,
+    movement_type TEXT NOT NULL CHECK (movement_type IN ('received', 'shipped')),
+    quantity      INTEGER NOT NULL CHECK (quantity > 0),
+    moved_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 TRUNCATE TABLE
+    stock_movements,
     reviews,
     deliveries,
     addresses,
@@ -87,6 +98,30 @@ INSERT INTO stock (product_id, quantity)
 SELECT id, (id * 7) % 100
 FROM products
 ORDER BY id;
+
+-- Два движения на каждый товар: поступление и отгрузка.
+INSERT INTO stock_movements (product_id, movement_type, quantity, moved_at)
+SELECT p.id, 'received', 50 + (p.id % 100), now() - interval '30 days'
+FROM products AS p
+UNION ALL
+SELECT p.id, 'shipped', 1 + (p.id % 40), now() - interval '1 day'
+FROM products AS p;
+
+-- Текущий остаток равен поступлениям минус отгрузки.
+UPDATE stock AS s
+SET quantity = totals.remaining_quantity,
+    updated_at = now()
+FROM (
+    SELECT
+        product_id,
+        SUM(CASE movement_type
+                WHEN 'received' THEN quantity
+                WHEN 'shipped' THEN -quantity
+            END)::integer AS remaining_quantity
+    FROM stock_movements
+    GROUP BY product_id
+) AS totals
+WHERE totals.product_id = s.product_id;
 
 -- Адреса покупателей (пользователи 101–1 000).
 INSERT INTO addresses (user_id, city, street, house, apartment)

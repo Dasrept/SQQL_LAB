@@ -54,3 +54,17 @@ SELECT id, title, price
 FROM products
 ORDER BY id
 LIMIT 20 OFFSET 20;
+
+-- 7. Обычная таблица товарного движения: поступило, отгружено и осталось.
+SELECT
+    p.id AS product_id,
+    p.title AS product_name,
+    COALESCE(SUM(m.quantity) FILTER (WHERE m.movement_type = 'received'), 0) AS received_qty,
+    COALESCE(SUM(m.quantity) FILTER (WHERE m.movement_type = 'shipped'), 0) AS shipped_qty,
+    s.quantity AS remaining_qty
+FROM products AS p
+JOIN stock AS s ON s.product_id = p.id
+LEFT JOIN stock_movements AS m ON m.product_id = p.id
+GROUP BY p.id, p.title, s.quantity
+ORDER BY p.id
+LIMIT 25;
