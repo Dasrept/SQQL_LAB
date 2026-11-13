@@ -1,5 +1,6 @@
 -- Лабораторная работа № 3: JOIN, агрегаты, подзапросы, CTE и представления.
--- Перед выполнением запустите lab01/01_schema.sql и lab02/01_seed_data.sql.
+-- Перед выполнением запустите lab03/00_schema_from_lab01.sql и
+-- lab03/01_seed_data_from_lab02.sql.
 
 SET search_path TO marketplace, public;
 
@@ -171,7 +172,36 @@ JOIN orders AS o ON o.id = oi.order_id
 WHERE o.status IN ('paid', 'processing', 'shipped', 'delivered')
 GROUP BY s.id, s.store_name;
 
+-- Обычная таблица результатов: приход, отгрузка и остаток по каждому товару.
+CREATE OR REPLACE VIEW v_inventory_movement_summary AS
+SELECT
+    p.id AS product_id,
+    p.title AS product_name,
+    COALESCE(SUM(m.quantity) FILTER (WHERE m.movement_type = 'received'), 0) AS received_qty,
+    COALESCE(SUM(m.quantity) FILTER (WHERE m.movement_type = 'shipped'), 0) AS shipped_qty,
+    st.quantity AS remaining_qty
+FROM products AS p
+JOIN stock AS st ON st.product_id = p.id
+LEFT JOIN stock_movements AS m ON m.product_id = p.id
+GROUP BY p.id, p.title, st.quantity;
+
+-- Аналитическая сводка по продавцу: сколько принято, отгружено и осталось.
+CREATE OR REPLACE VIEW v_inventory_by_seller AS
+SELECT
+    s.id AS seller_id,
+    s.store_name,
+    COUNT(p.id) AS products_count,
+    SUM(inv.received_qty) AS received_qty,
+    SUM(inv.shipped_qty) AS shipped_qty,
+    SUM(inv.remaining_qty) AS remaining_qty
+FROM sellers AS s
+JOIN products AS p ON p.seller_id = s.id
+JOIN v_inventory_movement_summary AS inv ON inv.product_id = p.id
+GROUP BY s.id, s.store_name;
+
 -- Примеры обращения к созданным представлениям.
 SELECT * FROM v_product_catalog ORDER BY product_id LIMIT 20;
 SELECT * FROM v_category_statistics ORDER BY products_count DESC, category_name;
 SELECT * FROM v_seller_revenue ORDER BY revenue DESC LIMIT 20;
+SELECT * FROM v_inventory_movement_summary ORDER BY product_id LIMIT 25;
+SELECT * FROM v_inventory_by_seller ORDER BY remaining_qty DESC LIMIT 25;
