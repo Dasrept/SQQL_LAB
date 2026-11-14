@@ -1,0 +1,25 @@
+-- Запускайте этот файл через psql: здесь намеренно возникает ошибка.
+-- ON_ERROR_STOP выключен, чтобы psql продолжил выполнение до ROLLBACK.
+\set ON_ERROR_STOP off
+
+SET search_path TO marketplace, public;
+
+-- Зафиксируйте исходный остаток, затем измените его внутри транзакции.
+SELECT quantity AS stock_before FROM stock WHERE product_id = 1;
+SELECT COUNT(*) AS orders_before_failure FROM orders;
+
+BEGIN;
+UPDATE stock
+SET quantity = quantity - 1,
+    updated_at = now()
+WHERE product_id = 1;
+
+-- Намеренная ошибка: столько товара на складе нет.
+-- Функция должна выдать исключение; незавершённая транзакция будет откатана ниже.
+SELECT place_order(101, 1, 2147483647);
+
+ROLLBACK;
+
+-- Остаток должен совпасть с stock_before; тестовый заказ не должен появиться.
+SELECT quantity AS stock_after_rollback FROM stock WHERE product_id = 1;
+SELECT COUNT(*) AS orders_after_rollback FROM orders;
