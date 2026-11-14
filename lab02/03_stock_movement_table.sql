@@ -13,5 +13,4 @@ FROM products AS p
 JOIN stock AS s ON s.product_id = p.id
 LEFT JOIN stock_movements AS m ON m.product_id = p.id
 GROUP BY p.id, p.title, s.quantity
-ORDER BY p.id
-LIMIT 25;
+ORDER BY p.id;
