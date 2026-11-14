@@ -203,5 +203,3 @@ GROUP BY s.id, s.store_name;
 SELECT * FROM v_product_catalog ORDER BY product_id LIMIT 20;
 SELECT * FROM v_category_statistics ORDER BY products_count DESC, category_name;
 SELECT * FROM v_seller_revenue ORDER BY revenue DESC LIMIT 20;
-SELECT * FROM v_inventory_movement_summary ORDER BY product_id LIMIT 25;
-SELECT * FROM v_inventory_by_seller ORDER BY remaining_qty DESC LIMIT 25;
