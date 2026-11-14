@@ -12,8 +12,7 @@ SELECT
     shipped_qty,
     remaining_qty
 FROM v_inventory_movement_summary
-ORDER BY product_id
-LIMIT 25;
+ORDER BY product_id;
 
 -- Суммарное количество товаров по каждому продавцу.
 SELECT
@@ -24,5 +23,4 @@ SELECT
     shipped_qty,
     remaining_qty
 FROM v_inventory_by_seller
-ORDER BY remaining_qty DESC
-LIMIT 25;
+ORDER BY remaining_qty DESC;
